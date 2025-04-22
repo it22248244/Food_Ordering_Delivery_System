@@ -1,0 +1,312 @@
+.checkout-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem;
+}
+
+.checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #e9ecef;
+  color: #495057;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 2rem;
+}
+
+.back-button:hover {
+  background-color: #dee2e6;
+}
+
+.checkout-header {
+  margin-bottom: 2rem;
+}
+
+.checkout-header h1 {
+  font-size: 2rem;
+  color: #212529;
+  margin-bottom: 1.5rem;
+}
+
+.steps {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: #6c757d;
+}
+
+.step.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.step.completed {
+  background-color: #28a745;
+  color: white;
+}
+
+.step-number {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 50%;
+  color: #212529;
+  font-weight: 600;
+}
+
+.step.active .step-number {
+  background-color: #0056b3;
+  color: white;
+}
+
+.step.completed .step-number {
+  background-color: #218838;
+  color: white;
+}
+
+.step-title {
+  font-weight: 500;
+}
+
+.checkout-content {
+  margin-bottom: 2rem;
+}
+
+.step-content {
+  max-width: 600px;
+}
+
+.step-content h2 {
+  font-size: 1.5rem;
+  color: #212529;
+  margin-bottom: 1.5rem;
+}
+
+.address-form,
+.payment-methods {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.payment-methods {
+  display: grid;
+  gap: 1rem;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.payment-method:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+.payment-method.selected {
+  border-color: #007bff;
+  background-color: #e7f1ff;
+}
+
+.order-summary {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.items-list {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.item-info h3 {
+  font-size: 1rem;
+  color: #212529;
+  margin: 0 0 0.25rem 0;
+}
+
+.item-info p {
+  color: #6c757d;
+  margin: 0;
+}
+
+.item-price {
+  font-weight: 600;
+  color: #212529;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.checkout-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.primary-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.primary-button:hover {
+  background-color: #0056b3;
+}
+
+.primary-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.secondary-button:hover {
+  background-color: #dee2e6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .checkout-page {
+    padding: 1rem;
+  }
+
+  .checkout-container {
+    padding: 1rem;
+  }
+
+  .steps {
+    flex-direction: column;
+  }
+
+  .step {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .checkout-actions {
+    flex-direction: column;
+  }
+
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+  }
+}
+
+/* Login Prompt */
+.login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+  gap: 1rem;
+}
+
+.login-prompt h2 {
+  color: #212529;
+  margin: 0;
+}
+
+.login-prompt button {
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-prompt button:hover {
+  background-color: #0056b3;
+}
+ 

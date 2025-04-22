@@ -1,0 +1,269 @@
+.cart-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.cart-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-header h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.cart-header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.empty-cart h2 {
+  font-size: 1.75rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.empty-cart p {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.browse-button {
+  padding: 1rem 2rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.browse-button:hover {
+  background-color: #ff5252;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto auto;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.cart-item:hover {
+  transform: translateY(-2px);
+}
+
+.item-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-details h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
+}
+
+.restaurant-name {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.price {
+  color: #ff6b6b;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quantity-button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: white;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quantity-button:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.item-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.item-total p {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.125rem;
+}
+
+.remove-button {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.remove-button:hover {
+  color: #f44336;
+}
+
+.cart-summary {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.summary-row.total {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.checkout-button {
+  flex: 1;
+  padding: 1rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover {
+  background-color: #ff5252;
+}
+
+.checkout-button:disabled {
+  background-color: #ffb3b3;
+  cursor: not-allowed;
+}
+
+.continue-shopping-button {
+  flex: 1;
+  padding: 1rem;
+  background: white;
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.continue-shopping-button:hover {
+  background-color: #fff5f5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cart-page {
+    padding: 1rem;
+  }
+
+  .cart-container {
+    padding: 1.5rem;
+  }
+
+  .cart-item {
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+  }
+
+  .item-quantity,
+  .item-total {
+    grid-column: 2;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .cart-actions {
+    flex-direction: column;
+  }
+} 
