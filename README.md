@@ -84,153 +84,154 @@ This project is licensed under the MIT License.
 
 ---
 
-# readme.txt
+# Food Delivery System Deployment Guide
 
-# Food Ordering & Delivery System - Deployment Guide
-
-This document outlines the steps required to deploy the food delivery microservices application.
+This document provides step-by-step instructions for deploying the Food Delivery System.
 
 ## Prerequisites
 
 - Docker and Docker Compose installed
-- Kubernetes cluster (for production deployment)
-- Node.js v16+ and npm
-- MongoDB (if running without Docker)
+- Node.js (v14 or higher)
+- MongoDB Atlas account (or local MongoDB)
+- Environment variables configured
 
-## Local Development Setup
+## Environment Variables Setup
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/your-username/food-delivery-system.git
-   cd food-delivery-system
-   ```
+Create a `.env` file in the root directory with the following variables:
 
-2. Create `.env` file in the root directory with the following variables:
-   ```
-   MONGO_USERNAME=admin
-   MONGO_PASSWORD=password
-   JWT_SECRET=your-secret-key
-   PAYHERE_API_URL=https://sandbox.payhere.lk/pay/checkout
-   PAYHERE_MERCHANT_ID=your-merchant-id
-   PAYHERE_MERCHANT_SECRET=your-merchant-secret
-   STRIPE_SECRET_KEY=your-stripe-secret-key
-   EMAIL_HOST=smtp.example.com
-   EMAIL_PORT=587
-   EMAIL_SECURE=false
-   EMAIL_USER=your-email@example.com
-   EMAIL_PASS=your-email-password
-   SMS_API_URL=https://api.example.com/sms
-   SMS_API_KEY=your-sms-api-key
-   SMS_SENDER_ID=FOODDEL
-   ```
+```env
+# MongoDB Configuration
+MONGO_USERNAME=your_mongo_username
+MONGO_PASSWORD=your_mongo_password
 
-3. Start the services using Docker Compose:
-   ```
-   docker-compose up --build
-   ```
+# JWT Configuration
+JWT_SECRET=your_jwt_secret
 
-4. Access the application:
-   - Frontend: http://localhost
-   - API Gateway: http://localhost:3000
+# Payment Gateway Configuration
+PAYHERE_API_URL=your_payhere_api_url
+PAYHERE_MERCHANT_ID=your_payhere_merchant_id
+PAYHERE_MERCHANT_SECRET=your_payhere_merchant_secret
+STRIPE_SECRET_KEY=your_stripe_secret_key
 
-## Individual Service Setup (for development)
+# Email Configuration
+EMAIL_HOST=your_email_host
+EMAIL_PORT=your_email_port
+EMAIL_SECURE=true/false
+EMAIL_USER=your_email_user
+EMAIL_PASS=your_email_password
 
-### Backend Services
+# SMS Configuration
+SMS_API_URL=your_sms_api_url
+SMS_API_KEY=your_sms_api_key
+SMS_SENDER_ID=your_sms_sender_id
+```
 
-For each service in the `services` directory:
+## Deployment Steps
 
-1. Navigate to the service directory:
-   ```
-   cd services/service-name
-   ```
+### 1. Clone the Repository
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+```bash
+git clone <repository-url>
+cd food-delivery-system
+```
 
-3. Create `.env` file with appropriate environment variables (see docker-compose.yml for reference)
+### 2. Install Dependencies
 
-4. Start the service:
-   ```
-   npm run dev
-   ```
+```bash
+# Install root dependencies
+npm install
 
-### Frontend
+# Install client dependencies
+cd client
+npm install
 
-1. Navigate to the client directory:
-   ```
-   cd client
-   ```
+# Install server dependencies
+cd ../server
+npm install
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+# Install service dependencies
+cd ../services
+for service in */; do
+  cd "$service"
+  npm install
+  cd ..
+done
+```
 
-3. Create `.env` file:
-   ```
-   REACT_APP_API_URL=http://localhost:3000/api
-   ```
+### 3. Build Docker Images
 
-4. Start the development server:
-   ```
-   npm start
-   ```
+```bash
+# Build all services
+docker-compose build
+```
 
-## Production Deployment with Kubernetes
+### 4. Start the Services
 
-1. Update the Kubernetes configuration files in the `k8s` directory with your specific settings.
+```bash
+# Start all services
+docker-compose up -d
+```
 
-2. Apply the MongoDB configuration:
-   ```
-   kubectl apply -f k8s/mongodb-secret.yaml
-   kubectl apply -f k8s/mongodb-pvc.yaml
-   kubectl apply -f k8s/mongodb-deployment.yaml
-   ```
+The system will start the following services:
+- MongoDB (port 27017)
+- API Gateway (port 3000)
+- User Service (port 3001)
+- Restaurant Service (port 3002)
+- Order Service (port 3003)
+- Delivery Service (port 3004)
+- Payment Service (port 3005)
+- Notification Service (port 3006)
 
-3. Apply the app secrets:
-   ```
-   kubectl apply -f k8s/app-secret.yaml
-   ```
+### 5. Verify Deployment
 
-4. Deploy the microservices:
-   ```
-   kubectl apply -f k8s/user-service-deployment.yaml
-   kubectl apply -f k8s/restaurant-service-deployment.yaml
-   kubectl apply -f k8s/order-service-deployment.yaml
-   kubectl apply -f k8s/delivery-service-deployment.yaml
-   kubectl apply -f k8s/payment-service-deployment.yaml
-   kubectl apply -f k8s/notification-service-deployment.yaml
-   kubectl apply -f k8s/api-gateway-deployment.yaml
-   ```
+Check if all services are running:
 
-5. Deploy the client application:
-   ```
-   kubectl apply -f k8s/client-deployment.yaml
-   ```
+```bash
+docker-compose ps
+```
 
-6. Apply the ingress configuration:
-   ```
-   kubectl apply -f k8s/ingress.yaml
-   ```
+### 6. Access the Application
 
-7. Access the application through the configured domain or load balancer IP.
+- Frontend: http://localhost:3000
+- API Gateway: http://localhost:3000/api
+- Individual services can be accessed through their respective ports
+
+## Stopping the Services
+
+To stop all services:
+
+```bash
+docker-compose down
+```
 
 ## Troubleshooting
 
-- If services are not connecting, check that all environment variables are set correctly.
-- For connection issues between services, ensure that service names match the environment variables.
-- If you encounter database connection errors, verify that MongoDB is running and accessible.
+1. If services fail to start:
+   - Check Docker logs: `docker-compose logs <service-name>`
+   - Verify environment variables are correctly set
+   - Ensure MongoDB connection is working
 
-For any other issues, please check the logs of the specific service:
-```
-docker logs container_name
-```
-or
-```
-kubectl logs pod_name
-```
+2. If you encounter port conflicts:
+   - Modify the port mappings in `docker-compose.yml`
+   - Ensure no other services are using the required ports
+
+3. For database issues:
+   - Check MongoDB connection string
+   - Verify database credentials
+   - Ensure MongoDB service is running
+
+## Additional Notes
+
+- The system uses MongoDB Atlas for database storage
+- All services are containerized using Docker
+- The API Gateway handles routing between services
+- Each service has its own database collection
+- Payment integration supports both PayHere and Stripe
+- Email and SMS notifications are configured through the notification service
+
+## Support
+
+For any deployment issues or questions, please contact the development team.
 
 ---
 
@@ -240,3 +241,11 @@ Team Members:
 - Samishka H T - IT22014290
 - Pandithasundara N B - IT22248244
 - Wijerathne C G T N - IT22333148
+
+---
+
+# submission.txt
+
+GitHub Repository: https://github.com/your-username/food-delivery-system
+
+YouTube Video Demo: https://www.youtube.com/watch?v=your-video-id
