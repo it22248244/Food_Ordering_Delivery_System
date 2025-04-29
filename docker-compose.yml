@@ -1,0 +1,187 @@
+version: '3.8'
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - food-delivery-network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - JWT_SECRET=${JWT_SECRET}
+      - USER_SERVICE_URL=http://user-service:3001
+      - RESTAURANT_SERVICE_URL=http://restaurant-service:3002
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - DELIVERY_SERVICE_URL=http://delivery-service:3004
+      - PAYMENT_SERVICE_URL=http://payment-service:3005
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3006
+    depends_on:
+      - user-service
+      - restaurant-service
+      - order-service
+      - delivery-service
+      - payment-service
+      - notification-service
+    networks:
+      - food-delivery-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./services/user-service
+    container_name: user-service
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - MONGO_URI=mongodb+srv://thevsami:thevin@cluster0.97wyf.mongodb.net/food-delivery-users?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongodb
+    networks:
+      - food-delivery-network
+
+  # Restaurant Service
+  restaurant-service:
+    build:
+      context: ./services/restaurant-service
+    container_name: restaurant-service
+    restart: always
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - MONGO_URI=mongodb+srv://thevsami:thevin@cluster0.97wyf.mongodb.net/food-delivery-restaurants?retryWrites=true&w=majority&appName=Cluster0
+      - USER_SERVICE_URL=http://user-service:3001
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongodb
+      - user-service
+    networks:
+      - food-delivery-network
+
+  # Order Service
+  order-service:
+    build:
+      context: ./services/order-service
+    container_name: order-service
+    restart: always
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - MONGO_URI=mongodb+srv://thevsami:thevin@cluster0.97wyf.mongodb.net/food-delivery-orders?retryWrites=true&w=majority&appName=Cluster0
+      - USER_SERVICE_URL=http://user-service:3001
+      - RESTAURANT_SERVICE_URL=http://restaurant-service:3002
+      - PAYMENT_SERVICE_URL=http://payment-service:3005
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3006
+      - DELIVERY_SERVICE_URL=http://delivery-service:3004
+    depends_on:
+      - mongodb
+      - user-service
+      - restaurant-service
+    networks:
+      - food-delivery-network
+
+  # Delivery Service
+  delivery-service:
+    build:
+      context: ./services/delivery-service
+    container_name: delivery-service
+    restart: always
+    ports:
+      - "3004:3004"
+    environment:
+      - PORT=3004
+      - MONGO_URI=mongodb+srv://thevsami:thevin@cluster0.97wyf.mongodb.net/food-delivery-delivery?retryWrites=true&w=majority&appName=Cluster0
+      - USER_SERVICE_URL=http://user-service:3001
+      - RESTAURANT_SERVICE_URL=http://restaurant-service:3002
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3006
+    depends_on:
+      - mongodb
+      - user-service
+      - restaurant-service
+      - order-service
+    networks:
+      - food-delivery-network
+
+  # Payment Service
+  payment-service:
+    build:
+      context: ./services/payment-service
+    container_name: payment-service
+    restart: always
+    ports:
+      - "3005:3005"
+    environment:
+      - PORT=3005
+      - MONGO_URI=mongodb+srv://thevsami:thevin@cluster0.97wyf.mongodb.net/food-delivery-payments?retryWrites=true&w=majority&appName=Cluster0
+      - USER_SERVICE_URL=http://user-service:3001
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3006
+      - PAYHERE_API_URL=${PAYHERE_API_URL}
+      - PAYHERE_MERCHANT_ID=${PAYHERE_MERCHANT_ID}
+      - PAYHERE_MERCHANT_SECRET=${PAYHERE_MERCHANT_SECRET}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+    depends_on:
+      - mongodb
+      - user-service
+    networks:
+      - food-delivery-network
+
+  # Notification Service
+  notification-service:
+    build:
+      context: ./services/notification-service
+    container_name: notification-service
+    restart: always
+    ports:
+      - "3006:3006"
+    environment:
+      - PORT=3006
+      - MONGO_URI=mongodb+srv://thevsami:thevin@cluster0.97wyf.mongodb.net/food-delivery-notifications?retryWrites=true&w=majority&appName=Cluster0
+      - USER_SERVICE_URL=http://user-service:3001
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - RESTAURANT_SERVICE_URL=http://restaurant-service:3002
+      - DELIVERY_SERVICE_URL=http://delivery-service:3004
+      - PAYMENT_SERVICE_URL=http://payment-service:3005
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_SECURE=${EMAIL_SECURE}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - SMS_API_URL=${SMS_API_URL}
+      - SMS_API_KEY=${SMS_API_KEY}
+      - SMS_SENDER_ID=${SMS_SENDER_ID}
+    depends_on:
+      - mongodb
+      - user-service
+    networks:
+      - food-delivery-network
+
+networks:
+  food-delivery-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:

@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Optional npm cache directory
+.npm
+
+# Local env files
+.env
